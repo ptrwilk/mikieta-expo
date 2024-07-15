@@ -57,7 +57,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
             </Text>
             <TouchableRipple
               style={{ marginTop: "auto", alignSelf: "flex-end" }}
-              onPress={() => {}}
+              onPress={onClose}
             >
               <Text
                 style={{
