@@ -5,9 +5,12 @@ import { View, StyleSheet } from "react-native";
 import { NotificationToggle } from "@/components/NotificationToggle";
 import { useSignalR } from "@/hooks/useSignalR";
 import { notificationCache } from "@/cache";
+import { useVibration } from "@/hooks/useVibration";
 
 export default function Test() {
   const [notificationOpened, setNotificationOpened] = useState(false);
+
+  const { enable: enableVibration, disable: disableVibration } = useVibration();
 
   const { enabled, start, stop } = useSignalR(
     {
@@ -18,6 +21,7 @@ export default function Test() {
         methodName: "OrderMade",
         callback: () => {
           setNotificationOpened(true);
+          enableVibration();
         },
       },
     ]
@@ -43,13 +47,15 @@ export default function Test() {
     }
   };
 
+  const handleClose = () => {
+    setNotificationOpened(false);
+    disableVibration();
+  };
+
   return (
     <View style={styles.container}>
       <NotificationToggle enabled={enabled} onClicked={handleClick} />
-      <NotificationModal
-        opened={notificationOpened}
-        onClose={() => setNotificationOpened(false)}
-      />
+      <NotificationModal opened={notificationOpened} onClose={handleClose} />
     </View>
   );
 }
